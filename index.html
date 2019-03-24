@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="utf-8">
+    <title>Foot counter</title>
+    <style>
+      html,body {
+        padding: 0;
+        margin: 0;
+        font-family: serif;
+        user-select: none;
+      }
+
+      .counter {
+        box-sizing: border-box;
+        width: 100vw;
+        height: 50vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .number-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+      }
+      .number {
+        font-size: 25vw;
+      }
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10vw;
+        width: 90vw;
+        flex: 0;
+      }
+      .controls span {
+        padding: 15px;
+        transition: background-color 3s linear;
+      }
+      .controls span:active {
+        padding: 15px;
+        background-color: #000;
+      }
+
+      .reset {
+        font-size: 5vw;
+        flex: 0;
+        padding: 5px;
+        transition: background-color 3s linear;
+      }
+      .reset:active {
+        background-color: #000;
+      }
+
+      .counter-a {
+        background-color: #e6b89c;
+        color: #32533d;
+      }
+
+      .counter-b {
+        background-color: #32533d;
+        color: #e6b89c;
+      }
+
+    </style>
+  </head>
+  <body>
+    <article>
+      <div class="counter counter-a">
+        <div class="controls">
+          <span class="minus">-</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="number-wrapper">
+          <span class="number">0</span>
+        </div>
+        <div class="reset">reset</div>
+      </div>
+      <div class="counter counter-b">
+        <div class="controls">
+          <span class="minus">-</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="number-wrapper">
+          <span class="number">0</span>
+        </div>
+        <div class="reset">reset</div>
+      </div>
+    </article>
+    <script type="text/javascript">
+      const ca = document.querySelector('.counter-a .number')
+      const plusa = document.querySelector('.counter-a .plus')
+      const minusa = document.querySelector('.counter-a .minus')
+      const cleara = document.querySelector('.counter-a .reset')
+
+      const cb = document.querySelector('.counter-b .number')
+      const plusb = document.querySelector('.counter-b .plus')
+      const minusb = document.querySelector('.counter-b .minus')
+      const clearb = document.querySelector('.counter-b .reset')
+
+      const getCount = (name) => {
+        const val = parseInt(localStorage.getItem(name), 10)
+        return isNaN(val) ? 0 : val;
+      }
+
+      const setCount = (name, value) => localStorage.setItem(name, value)
+
+      const update = (name) => {
+        ca.textContent = getCount('a')
+        cb.textContent = getCount('b')
+      }
+
+      const inc = (name) => {
+        setCount(name, getCount(name) + 1)
+        update()
+      }
+      const dec = (name) => {
+        setCount(name, Math.max(0, getCount(name) - 1))
+        update()
+      }
+      const clear = (name) => {
+        setCount(name, 0)
+        update()
+      }
+
+      update();
+
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'a' || event.key === 'b' | event.key === 'A' || event.key === 'B') {
+          inc(event.key.toLowerCase())
+        }
+      })
+
+      plusa.addEventListener('click', () => inc('a'))
+      plusb.addEventListener('click', () => inc('b'))
+      minusa.addEventListener('click', () => dec('a'))
+      minusb.addEventListener('click', () => dec('b'))
+
+      cleara.addEventListener('click', () => clear('a'))
+      clearb.addEventListener('click', () => clear('b'))
+
+
+    </script>
+  </body>
+</html>
